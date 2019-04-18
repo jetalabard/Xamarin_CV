@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:paddingTop="@dimen/abc_dialog_padding_material">
+    <android.support.v7.widget.CardView
+        android:layout_width="fill_parent"
+        android:layout_height="245dp"
+        android:layout_gravity="center_horizontal"
+        cardview:cardElevation="4dp"
+        cardview:cardCornerRadius="5dp">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="240dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+			<TextView
+				android:id="@+id/labelTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+				android:textSize="@dimen/abc_text_size_title_material">
+			</TextView>
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="190dp"
+                android:id="@+id/ProfilImage"
+                android:scaleType="centerCrop" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#333333"
+                android:id="@+id/labelDescription"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

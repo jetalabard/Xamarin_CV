@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Talabard Jérémy</string>
+    <string name="navigation_drawer_open">Ouvre l\'onglet de navigation</string>
+    <string name="navigation_drawer_close">Fermer l\'onglet de navigation</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="mail">jeremy.talabard@hotmail.fr</string>
+    <string name="menu">Menu</string>
+    <string name="SettingsReload">Taux de rafraîchissement des données</string>
+    <string name="setting_Prompt">Choisir un mode de rafraîchisssement</string>
+  <string name="adress">Adresse</string>
+    <string-array name="refresh_mode">
+      <item>Seulement au démarrage</item>
+      <item>Toutes les 5 minutes</item>
+      <item>Toutes les 30 secondes</item>
+    </string-array>
+</resources>
