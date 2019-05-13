@@ -38,6 +38,8 @@
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
+    <MandroidI18n />
+    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -61,56 +63,39 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Controller\DAO\DataXMLFile.cs" />
-    <Compile Include="Controller\DAO\IDataAccess.cs" />
-    <Compile Include="Controller\DAO\MockData.cs" />
-    <Compile Include="Controller\DAO\DataManager.cs" />
-    <Compile Include="Controller\DAO\LinkClassToTable.cs" />
-    <Compile Include="Controller\Downloader\Downloader.cs" />
-    <Compile Include="Controller\Downloader\DownloadEventArgs.cs" />
-    <Compile Include="Controller\Downloader\IDownloader.cs" />
-    <Compile Include="Controller\Permission\CheckPermission.cs" />
+    <Compile Include="Controller\Configuration\AndroidConfigurationStreamProvider.cs" />
+    <Compile Include="Controller\Configuration\AndroidConfigurationStreamProviderFactory.cs" />
+    <Compile Include="Controller\DirectoryAndroidManager.cs" />
+    <Compile Include="Controller\CheckPermission.cs" />
     <Compile Include="Controller\Services\CheckInternet.cs" />
-    <Compile Include="Controller\Services\ImageManager.cs" />
     <Compile Include="Controller\Services\SharedPreferenceManager.cs" />
-    <Compile Include="Controller\Services\XmlReader.cs" />
-    <Compile Include="Model\AbstractEntity.cs" />
-    <Compile Include="Model\Activities\Activity.cs" />
-    <Compile Include="Model\Activities\Hobie.cs" />
-    <Compile Include="Model\Activities\Job.cs" />
-    <Compile Include="Model\Activities\PersonalProject.cs" />
-    <Compile Include="Model\Activities\Project.cs" />
-    <Compile Include="Model\Activities\Training.cs" />
+    <Compile Include="Controller\ShowDialog.cs" />
     <Compile Include="Model\ActivityAdapter.cs" />
-    <Compile Include="Model\Cv.cs" />
-    <Compile Include="Model\Description.cs" />
-    <Compile Include="Model\Header.cs" />
-    <Compile Include="Model\Knowledge.cs" />
-    <Compile Include="Model\Link.cs" />
-    <Compile Include="Model\TimeManager.cs" />
+    <Compile Include="Model\ButtonAdapter.cs" />
+    <Compile Include="Model\ImageAdapter.cs" />
+    <Compile Include="Model\HeaderList.cs" />
+    <Compile Include="Model\ViewItemButton.cs" />
     <Compile Include="Model\ViewItemHolder.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\Fragment\DescriptionFragment.cs" />
-    <Compile Include="View\Fragment\ErrorDialogFragment.cs" />
+    <Compile Include="View\Fragment\ExpandableHeightGridView.cs" />
+    <Compile Include="View\Fragment\KnowledgeFragment.cs" />
+    <Compile Include="View\Fragment\KnowledgesLanguageFragment.cs" />
+    <Compile Include="View\Fragment\KnowledgesToolFragment.cs" />
+    <Compile Include="View\Fragment\MyFragmentPagerAdpater.cs" />
     <Compile Include="View\Fragment\SettingFragment.cs" />
     <Compile Include="View\Fragment\ListActivitiesFragment.cs" />
     <Compile Include="View\HomeActivity.cs" />
-    <Compile Include="View\MapWithMarkersActivity.cs" />
     <Compile Include="View\SplashScreenActivity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\configuration.json" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
-    <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_main.axml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\app_bar_main.axml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
@@ -204,10 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.Compression.ZipFile">
-      <Version>4.3.0</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
@@ -222,6 +204,9 @@
       <Version>28.0.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design">
+      <Version>28.0.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v13">
       <Version>28.0.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.CardView">
@@ -301,19 +286,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\splash.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\work.png">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\map_content.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -360,14 +333,46 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\list.axml">
+    <AndroidResource Include="Resources\layout\row.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\row.axml">
+    <AndroidResource Include="Resources\layout\splash.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\splash_background.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\knowledges.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\knowledgeLanguage.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\knowledgeTool.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\buttonGrid.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cv_Core\Cv_Core.csproj">
+      <Project>{987ea147-4319-4b95-99a3-ab24636094fd}</Project>
+      <Name>Cv_Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\divider.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

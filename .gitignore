@@ -1,0 +1,12 @@
+﻿################################################################################
+# Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
+################################################################################
+
+/Cv_Core/bin/Debug/netstandard2.0
+/.vs
+/Cv_Core/obj
+/Cv_Forms/Cv_Forms/bin/Debug/netstandard2.0
+/Cv_Forms/Cv_Forms/obj
+/Cv_Forms/Cv_Forms.Android/bin/Debug
+/Cv_Forms/Cv_Forms.Android/obj
+/TalabardJeremyCv/bin/Debug

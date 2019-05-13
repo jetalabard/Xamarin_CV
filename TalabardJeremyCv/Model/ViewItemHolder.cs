@@ -19,5 +19,7 @@ namespace TalabardJeremyCv.Model
         public TextView SubTitle { get; set; }
         public TextView Date { get; set; }
         public TextView Summary { get; set; }
+
+        public GridView Grid { get; set; }
     }
 }

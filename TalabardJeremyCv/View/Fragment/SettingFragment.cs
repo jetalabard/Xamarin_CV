@@ -1,16 +1,15 @@
 ﻿
-using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
 using TalabardJeremyCv.Controller.Services;
 using System;
-using TalabardJeremyCv;
-using Android;
+using Android.Support.V7.App;
+using Cv_Core;
 
 namespace TalabardJeremyCv.XView.XFragment
 {
-    public class SettingFragment : Fragment
+    public class SettingFragment : Android.App.Fragment
     {
         public static SettingFragment NewInstance()
         {
@@ -28,6 +27,17 @@ namespace TalabardJeremyCv.XView.XFragment
         {
            
             View view = inflater.Inflate(Resource.Layout.settings, container, false);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Honeycomb)
+            {
+                ((AppCompatActivity)Activity).SupportActionBar.Subtitle = Constants.PAGE_SETTING;
+            }
+            else
+            {
+                TextView TitleLabel = view.FindViewById<TextView>(Resource.Id.TitleSetting);
+                TitleLabel.SetText(Constants.PAGE_SETTING, TextView.BufferType.Normal);
+                TitleLabel.Visibility = ViewStates.Invisible;
+            }
 
             Spinner spRefreshData = view.FindViewById<Spinner>(Resource.Id.cbSettingsReload);
             spRefreshData.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);

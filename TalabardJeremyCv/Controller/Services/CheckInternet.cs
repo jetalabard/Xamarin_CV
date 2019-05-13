@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Plugin.Connectivity;
+using TalabardJeremyCv.Controller;
 
 namespace TalabardJeremyCv
 {
@@ -18,21 +19,15 @@ namespace TalabardJeremyCv
         public static bool HasConnexion() => CrossConnectivity.Current.IsConnected;
 
 
-        public static void ShowMessageIfNotConnected(Activity activity)
+
+
+        public static async Task<ShowDialog.MessageResult> ShowMessageIfNotConnected(Activity activity)
         {
-                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.SetTitle("Erreur");
-                alert.SetMessage("Pas de connection internet ! ");
-                alert.SetPositiveButton("Ok", (senderAlert, args) => {
-                    //Toast.MakeText(activity, "Deleted!", ToastLength.Short).Show();
-                });
-
-               /* alert.SetNegativeButton("Cancel", (senderAlert, args) => {
-                    Toast.MakeText(activity, "Cancelled!", ToastLength.Short).Show();
-                });*/
-
-                Dialog dialog = alert.Create();
-                dialog.Show();
+            return await new ShowDialog().AlertAsync(activity, 
+                "Erreur", 
+                "Pas de connection internet, activer le Wifi ou les données mobiles et rééssayer!", 
+                "Réésayer",
+                "Quitter");
             }
     }
 }

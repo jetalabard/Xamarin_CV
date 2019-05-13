@@ -1,43 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:paddingTop="@dimen/abc_dialog_padding_material">
-    <android.support.v7.widget.CardView
-        android:layout_width="fill_parent"
-        android:layout_height="245dp"
-        android:layout_gravity="center_horizontal"
-        cardview:cardElevation="4dp"
-        cardview:cardCornerRadius="5dp">
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="240dp"
-            android:orientation="vertical"
-            android:padding="8dp">
-			<TextView
-				android:id="@+id/labelTitle"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-				android:textSize="@dimen/abc_text_size_title_material">
-			</TextView>
+    android:paddingTop="?attr/actionBarSize"
+    android:paddingLeft="@dimen/fastscroll_default_thickness"
+    android:paddingRight="@dimen/fastscroll_default_thickness">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/labelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="@dimen/abc_text_size_title_material">
+        </TextView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:elevation="12dp"
+            app:cardCornerRadius="50dp">
             <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="190dp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
                 android:id="@+id/ProfilImage"
-                android:scaleType="centerCrop" />
-            <TextView
-                android:layout_width="fill_parent"
+                android:scaleType="fitCenter"/>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/labelDescription"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:padding="@dimen/abc_dialog_padding_material"
+            android:textSize="12sp"
+            android:justificationMode="inter_word"/>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/projectLink"
+            android:layout_margin="5dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#333333"
-                android:id="@+id/labelDescription"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="5dp" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/Thumbnail"
+                    android:src="@drawable/work"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:tint="@color/white"
+                    android:paddingLeft="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/TitleProject"
+                    android:text="Stages / Projets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/Thumbnail"
+                    android:paddingLeft="55dp"
+                    android:textColor="@color/white"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+                <TextView
+                    android:id="@+id/DescriptionProject"
+                    android:text="Example Example Example Example Example Example Example Example Example Example Example Example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TitleProject"
+                    android:layout_toRightOf="@+id/Thumbnail"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/white"
+                    android:paddingBottom="5dp"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/personalProjectLink"
+            android:layout_margin="5dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/Thumbnail2"
+                    android:src="@drawable/device"
+                    android:layout_width="50dp"
+                    android:tint="@color/white"
+                    android:paddingLeft="10dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/TitlePersonal"
+                    android:text="Projets Personnels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/Thumbnail2"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                <TextView
+                    android:id="@+id/DescriptionPersonal"
+                    android:text="Example Example Example Example Example Example Example Example Example Example Example Example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TitlePersonal"
+                    android:layout_toRightOf="@+id/Thumbnail2"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/white"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="5dp"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/schoolLink">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/Thumbnail3"
+                    android:src="@drawable/school"
+                    android:layout_width="50dp"
+                    android:paddingLeft="10dp"
+                    android:tint="@color/white"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/TitleSchool"
+                    android:text="Formations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/Thumbnail3"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                <TextView
+                    android:id="@+id/DescriptionSchool"
+                    android:text="Example Example Example Example Example Example Example Example Example Example Example Example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TitleSchool"
+                    android:layout_toRightOf="@+id/Thumbnail3"
+                    android:paddingLeft="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/jobLink">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/Thumbnail4"
+                    android:src="@drawable/ic_menu_manage"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:tint="@color/white"
+                    android:paddingLeft="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/TitleJob"
+                    android:text="Emplois"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/Thumbnail4"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                <TextView
+                    android:id="@+id/DescriptionJob"
+                    android:text="Example Example Example Example Example Example Example Example Example Example Example Example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TitleJob"
+                    android:layout_toRightOf="@+id/Thumbnail4"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/white"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:layout_margin="5dp"
+            android:id="@+id/hobiesLink">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/Thumbnail5"
+                    android:src="@drawable/run"
+                    android:layout_width="50dp"
+                    android:paddingLeft="10dp"
+                    android:tint="@color/white"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/TitleHobies"
+                    android:text="Stages / Projets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/Thumbnail5"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                <TextView
+                    android:id="@+id/DescriptionHobies"
+                    android:text="Example Example Example Example Example Example Example Example Example Example Example Example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TitleHobies"
+                    android:layout_toRightOf="@+id/Thumbnail5"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/white"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="5dp"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/knowledgesLink">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/Thumbnail6"
+                    android:src="@drawable/device"
+                    android:layout_width="50dp"
+                    android:paddingLeft="10dp"
+                    android:layout_height="50dp"
+                    android:tint="@color/white"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/TitleKnowledge"
+                    android:text="Compétences Informatiques"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/Thumbnail6"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/white"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+                <TextView
+                    android:id="@+id/DescriptionKnowledge"
+                    android:text="Example Example Example Example Example Example Example Example Example Example Example Example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TitleKnowledge"
+                    android:layout_toRightOf="@+id/Thumbnail6"
+                    android:paddingLeft="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

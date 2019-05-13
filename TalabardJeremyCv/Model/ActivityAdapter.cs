@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using System.Collections.Generic;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using TalabardJeremyCv.Controller.Services;
-using static Android.Support.V7.Widget.RecyclerView;
+using Cv_Core;
+using Cv_Core.DataModel;
+using TalabardJeremyCv.XView.Fragment;
 
 namespace TalabardJeremyCv.Model
 {
@@ -18,9 +12,12 @@ namespace TalabardJeremyCv.Model
     {
         private List<T> _Activities;
 
-        public ActivityAdapter(List<T> activities)
+        private Context _Context;
+
+        public ActivityAdapter(Context context, List<T> activities)
         {
             _Activities = activities;
+            _Context = context;
         }
 
         public override T this[int position]
@@ -57,18 +54,22 @@ namespace TalabardJeremyCv.Model
                 var date = view.FindViewById<TextView>(Resource.Id.dateTextView);
                 var summary = view.FindViewById<TextView>(Resource.Id.summaryTextView);
 
+                var gridView = view.FindViewById<ExpandableHeightGridView>(Resource.Id.gridButton);
+                gridView.Expanded =true;
 
-                view.Tag = new ViewItemHolder() { Image = photo, Title = title, SubTitle = subTitle, Date = date, Summary = summary };
+
+                view.Tag = new ViewItemHolder() { Image = photo, Title = title, SubTitle = subTitle, Date = date, Summary = summary, Grid = gridView };
             }
 
             var holder = (ViewItemHolder)view.Tag;
 
-            holder.Image.SetImageDrawable(ImageManager.Get(parent.Context, _Activities[position].Image));
+            holder.Image.SetImageBitmap(ImageManager.GetBitmapFromPath(_Activities[position].Image));
             holder.Title.Text = _Activities[position].Title;
             holder.SubTitle.Text = _Activities[position].SubTitle;
             holder.Date.Text = _Activities[position].Date;
             holder.Summary.Text = _Activities[position].Summary;
 
+            holder.Grid.Adapter = new ButtonAdapter(_Context,_Activities[position].Links);
 
             return view;
         }

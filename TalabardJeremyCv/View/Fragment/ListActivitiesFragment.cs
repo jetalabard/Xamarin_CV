@@ -1,51 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Android.App;
 using Android.OS;
-using Android.Support.V4.Widget;
+using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using TalabardJeremyCv.Controller.DAO;
+using Cv_Core;
+using Cv_Core.DataManagement;
+using Cv_Core.DataModel;
 using TalabardJeremyCv.Model;
 
 namespace TalabardJeremyCv.XView.XFragment
 {
-    public class ListActivitiesFragment<T> : ListFragment where T: Model.Activity
+    public class ListActivitiesFragment<T> : Android.App.Fragment where T: Activity
     {
         private List<T> _Activities;
-
-        private SwipeRefreshLayout swipeContainer;
-
-
+               
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            // Create your fragment here
             _Activities = DataManager.GetInstance().GetActivities<T>().ToList();
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            // Use this to return your custom view for this Fragment
-            // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
             View view = inflater.Inflate(Resource.Layout.content_main, container, false);
-            
+
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Honeycomb)
+            {
+                ((AppCompatActivity)Activity).SupportActionBar.Subtitle = GetTitle();
+            }
+            else
+            {
+                TextView TitleLabel = view.FindViewById<TextView>(Resource.Id.TitleActivity);
+                TitleLabel.SetText(GetTitle(), TextView.BufferType.Normal);
+                TitleLabel.Visibility = ViewStates.Invisible;
+            }
+
             ListView listActivities= view.FindViewById<ListView>(Resource.Id.listView);
 
-            listActivities.Adapter = new ActivityAdapter<T>(_Activities);
-
+            listActivities.Adapter = new ActivityAdapter<T>(Activity, _Activities);
 
             return view;
         }
 
-        async void SwipeContainer_Refresh(object sender, EventArgs e)
+        private string GetTitle()
         {
-            await Task.Delay(5);
-            _Activities = DataManager.GetInstance().GetActivities<T>().ToList();
-            (sender as SwipeRefreshLayout).Refreshing = false;
+            string title = string.Empty;
+
+            if(typeof(T) == typeof(Training))
+            {
+                title = Constants.PAGE_TRAINING;
+            }
+            else if (typeof(T) == typeof(Hobie))
+            {
+                title = Constants.PAGE_HOBIE;
+            }
+            else if(typeof(T) == typeof(Job))
+            {
+                title = Constants.PAGE_JOB;
+            }
+            else if(typeof(T) == typeof(Project))
+            {
+                title = Constants.PAGE_PROJECT;
+            }
+            else if(typeof(T) == typeof(PersonalProject))
+            {
+                title = Constants.PAGE_PERSONALPROJECT;
+            }
+            return title;
         }
     }
 }

@@ -2,22 +2,13 @@
   "version": 3,
   "targets": {
     "MonoAndroid,Version=v8.1": {
-      "Newtonsoft.Json/12.0.1": {
+      "Newtonsoft.Json/12.0.2": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
-        }
-      },
-      "System.IO.Compression.ZipFile/4.3.0": {
-        "type": "package",
-        "compile": {
-          "ref/MonoAndroid10/_._": {}
-        },
-        "runtime": {
-          "lib/MonoAndroid10/_._": {}
         }
       },
       "System.Net.Http/4.3.4": {
@@ -270,6 +261,25 @@
           "build/monoandroid81/Xamarin.Android.Support.Transition.targets": {}
         }
       },
+      "Xamarin.Android.Support.v13/28.0.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Compat": "[28.0.0.1]",
+          "Xamarin.Android.Support.Core.UI": "[28.0.0.1]",
+          "Xamarin.Android.Support.Core.Utils": "[28.0.0.1]",
+          "Xamarin.Android.Support.Fragment": "[28.0.0.1]",
+          "Xamarin.Android.Support.Media.Compat": "[28.0.0.1]"
+        },
+        "compile": {
+          "lib/monoandroid81/Xamarin.Android.Support.v13.dll": {}
+        },
+        "runtime": {
+          "lib/monoandroid81/Xamarin.Android.Support.v13.dll": {}
+        },
+        "build": {
+          "build/monoandroid81/Xamarin.Android.Support.v13.targets": {}
+        }
+      },
       "Xamarin.Android.Support.v7.AppCompat/28.0.0.1": {
         "type": "package",
         "dependencies": {
@@ -430,86 +440,51 @@
         "build": {
           "build/MonoAndroid80/Xamarin.GooglePlayServices.Tasks.targets": {}
         }
+      },
+      "Cv_Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "bin/placeholder/Cv_Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Cv_Core.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "Newtonsoft.Json/12.0.1": {
-      "sha512": "pBR3wCgYWZGiaZDYP+HHYnalVnPJlpP1q55qvVb+adrDHmFMDc1NAKio61xTwftK3Pw5h7TZJPJEEVMd6ty8rg==",
+    "Newtonsoft.Json/12.0.2": {
+      "sha512": "rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
       "type": "package",
-      "path": "newtonsoft.json/12.0.1",
+      "path": "newtonsoft.json/12.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
-        "Newtonsoft.Json.12.0.1.nupkg.sha512",
-        "Newtonsoft.Json.nuspec",
         "lib/net20/Newtonsoft.Json.dll",
-        "lib/net20/Newtonsoft.Json.pdb",
         "lib/net20/Newtonsoft.Json.xml",
         "lib/net35/Newtonsoft.Json.dll",
-        "lib/net35/Newtonsoft.Json.pdb",
         "lib/net35/Newtonsoft.Json.xml",
         "lib/net40/Newtonsoft.Json.dll",
-        "lib/net40/Newtonsoft.Json.pdb",
         "lib/net40/Newtonsoft.Json.xml",
         "lib/net45/Newtonsoft.Json.dll",
-        "lib/net45/Newtonsoft.Json.pdb",
         "lib/net45/Newtonsoft.Json.xml",
         "lib/netstandard1.0/Newtonsoft.Json.dll",
-        "lib/netstandard1.0/Newtonsoft.Json.pdb",
         "lib/netstandard1.0/Newtonsoft.Json.xml",
         "lib/netstandard1.3/Newtonsoft.Json.dll",
-        "lib/netstandard1.3/Newtonsoft.Json.pdb",
         "lib/netstandard1.3/Newtonsoft.Json.xml",
         "lib/netstandard2.0/Newtonsoft.Json.dll",
-        "lib/netstandard2.0/Newtonsoft.Json.pdb",
         "lib/netstandard2.0/Newtonsoft.Json.xml",
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.dll",
-        "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.pdb",
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
-        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.pdb",
-        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml"
-      ]
-    },
-    "System.IO.Compression.ZipFile/4.3.0": {
-      "sha512": "G4HwjEsgIwy3JFBduZ9quBkAu+eUwjIdJleuNSgmUojbH6O3mlvEIme+GHx/cLlTAPcrnnL7GqvB9pTlWRfhOg==",
-      "type": "package",
-      "path": "system.io.compression.zipfile/4.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "System.IO.Compression.ZipFile.4.3.0.nupkg.sha512",
-        "System.IO.Compression.ZipFile.nuspec",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/System.IO.Compression.ZipFile.dll",
-        "lib/netstandard1.3/System.IO.Compression.ZipFile.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/System.IO.Compression.ZipFile.dll",
-        "ref/netstandard1.3/System.IO.Compression.ZipFile.dll",
-        "ref/netstandard1.3/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/de/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/es/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/fr/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/it/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/ja/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/ko/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/ru/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/zh-hans/System.IO.Compression.ZipFile.xml",
-        "ref/netstandard1.3/zh-hant/System.IO.Compression.ZipFile.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
+        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
+        "newtonsoft.json.12.0.2.nupkg.sha512",
+        "newtonsoft.json.nuspec"
       ]
     },
     "System.Net.Http/4.3.4": {
@@ -555,7 +530,7 @@
       ]
     },
     "System.Numerics.Vectors/4.5.0": {
-      "sha512": "nATsBTD2CKr4AYN6eRszhX4sptImWmBJwB/U6XKCWWfnCcrTBw8XSCm3QA9gjppkHTr8OkXUY21MR91D3QZXsw==",
+      "sha512": "QQTlPTl06J/iiDbJCiepZ4H//BVraReU4O4EoRw1U02H5TLUIT7xn3GnDp9AXPSlJUDyFs4uWjWafNX6WrAojQ==",
       "type": "package",
       "path": "system.numerics.vectors/4.5.0",
       "files": [
@@ -602,7 +577,7 @@
       ]
     },
     "Xam.Plugin.Connectivity/3.2.0": {
-      "sha512": "V0IKUjLnWO4zl1VI/7Keclez5kk21PIpVUqacbMtbl1Ky7PrUNUOrO8Xmfrxn5E38ihzrmgGpuC6TXCwL3Sl+Q==",
+      "sha512": "ZV45TaBTCJg7XQNEl3fPyyJcuMMhdDEQ6BCLc/5pMuTv38M226ER0WTu5sbmba8jlliDuzeRqkRFHwrGdWAgyg==",
       "type": "package",
       "path": "xam.plugin.connectivity/3.2.0",
       "files": [
@@ -612,7 +587,6 @@
         "lib/MonoAndroid10/Plugin.Connectivity.Abstractions.pdb",
         "lib/MonoAndroid10/Plugin.Connectivity.Abstractions.xml",
         "lib/MonoAndroid10/Plugin.Connectivity.dll",
-        "lib/MonoAndroid10/Plugin.Connectivity.dll.mdb",
         "lib/MonoAndroid10/Plugin.Connectivity.pdb",
         "lib/MonoAndroid10/Plugin.Connectivity.xml",
         "lib/UAP10/Plugin.Connectivity.Abstractions.dll",
@@ -953,6 +927,27 @@
         "xamarin.android.support.transition.nuspec"
       ]
     },
+    "Xamarin.Android.Support.v13/28.0.0.1": {
+      "sha512": "7FviIym0B/gZm1JUxsWGEQjtfRyKJyTWgd4GKo4Ns8khg4lcPqKD3f6Kk7/yIgeXzpukW5CwZd1VmlrWxDpC+w==",
+      "type": "package",
+      "path": "xamarin.android.support.v13/28.0.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/monoandroid71/Xamarin.Android.Support.v13.targets",
+        "build/monoandroid80/Xamarin.Android.Support.v13.targets",
+        "build/monoandroid81/Xamarin.Android.Support.v13.targets",
+        "build/monoandroid90/Xamarin.Android.Support.v13.targets",
+        "lib/monoandroid60/Xamarin.Android.Support.v13.dll",
+        "lib/monoandroid70/Xamarin.Android.Support.v13.dll",
+        "lib/monoandroid71/Xamarin.Android.Support.v13.dll",
+        "lib/monoandroid80/Xamarin.Android.Support.v13.dll",
+        "lib/monoandroid81/Xamarin.Android.Support.v13.dll",
+        "lib/monoandroid90/Xamarin.Android.Support.v13.dll",
+        "xamarin.android.support.v13.28.0.0.1.nupkg.sha512",
+        "xamarin.android.support.v13.nuspec"
+      ]
+    },
     "Xamarin.Android.Support.v7.AppCompat/28.0.0.1": {
       "sha512": "MEkm7hZNa/nxnZ3a7E6HcpaFL07scQbbFNZ+btCNIS2cfzWKRHpxwjXJ2JhZr2GEknfbgwrxmOILmrbt6QlLlA==",
       "type": "package",
@@ -1049,7 +1044,7 @@
       ]
     },
     "Xamarin.Build.Download/0.4.9": {
-      "sha512": "CxKoLSKdiUUe0UslTcb2ZP7QsC0lf7hwwpGckkHuczRMuD/MjmcXyJGVy4oWa5qbLSM4AW9D9ZvPFue39XVBAg==",
+      "sha512": "HDQzyew/2Kb8sOjbzcHtFFxLbCclln+1T8bssKx9zAs9HNuK/1mugf077A9VxzID/fFBMmBXvL/z2jUpNlgX2A==",
       "type": "package",
       "path": "xamarin.build.download/0.4.9",
       "files": [
@@ -1067,7 +1062,7 @@
       ]
     },
     "Xamarin.Essentials/1.1.0": {
-      "sha512": "AGismQb55pszEQ/ZIv9O1U2YyaF2gHdBdAUO79+biHf1s7AL2R++DIvmf7Z+wtfhZrB9wxhXAkOUuYHgpY6oTw==",
+      "sha512": "W0XOt1dNMAE2POcsVotoKDDy5FdAOnR0qULKl6WI4kQEMxQ1sp84DsSU5iacV7oQUMuPhUBAm/3ywks0HO1QrQ==",
       "type": "package",
       "path": "xamarin.essentials/1.1.0",
       "files": [
@@ -1110,7 +1105,7 @@
       ]
     },
     "Xamarin.GooglePlayServices.Base/60.1142.1": {
-      "sha512": "mEyHPIGA6fqE9AmO8zr3+izgt7rZDuB3OHGrDmU/Mg6cP0z205wXK5z5j4EfI0XZ0kgU0Z33IKbVDgndfFwZeA==",
+      "sha512": "XI1JjQRV3sYgZ8AfMzL67ttVtlELkXf2wUQr8XI06MbCAX7lCC7yw/Bdwyf6atTsDCa7CRIrL0PkWMf0riAbOA==",
       "type": "package",
       "path": "xamarin.googleplayservices.base/60.1142.1",
       "files": [
@@ -1123,7 +1118,7 @@
       ]
     },
     "Xamarin.GooglePlayServices.Basement/60.1142.1": {
-      "sha512": "85zCK7rGY/gjznoQHl2J8Asody+vV4gp88IGZJ/FfnOZYo2KMZVdCb2Iw7q7QwsQCrSYiakDYeeugVB7BY6q6w==",
+      "sha512": "G4PFBPoAovRwmCdO7jpdeZ5N974JsOjiLKDnOcZxC+4IjYs0ZvoBP/dyYDI32tCbpzNEbb/00oqx35Gjgl5f2g==",
       "type": "package",
       "path": "xamarin.googleplayservices.basement/60.1142.1",
       "files": [
@@ -1137,7 +1132,7 @@
       ]
     },
     "Xamarin.GooglePlayServices.Maps/60.1142.1": {
-      "sha512": "1c0X3Ro/tfDu3/G8Y3JG4qgPSqFFvKebAZYNEChd0L2Lsk0Wa8LipSpzK5h7+/0Qvxpbyx53+76DOdSRecPodA==",
+      "sha512": "vfoDYOOtox8RDjEAV2AYmoTQpKj3dhy5Zhn8EpYB2uelTTkTAfp+5CWZ57ZQHs4PdpSyjFmRS+nVEAP4Fn2qkg==",
       "type": "package",
       "path": "xamarin.googleplayservices.maps/60.1142.1",
       "files": [
@@ -1150,7 +1145,7 @@
       ]
     },
     "Xamarin.GooglePlayServices.Tasks/60.1142.1": {
-      "sha512": "300vD5hWHqAQ5SXwwDlyDkeK1O73fqIQMdz9i+8Y7h8yB1+3DitD9SuLBSh+6aJhldYOGo1lBsdlsXBc12t+vw==",
+      "sha512": "DS4MgQWwbAuAf5gXGPAPCpuCVkElQSTv/iguZ9Ca5vmiXpbrbvCpN5JhxBYu2qGkSn1wwX37bI+EHib/FVQthg==",
       "type": "package",
       "path": "xamarin.googleplayservices.tasks/60.1142.1",
       "files": [
@@ -1161,50 +1156,64 @@
         "xamarin.googleplayservices.tasks.60.1142.1.nupkg.sha512",
         "xamarin.googleplayservices.tasks.nuspec"
       ]
+    },
+    "Cv_Core/1.0.0": {
+      "type": "project",
+      "path": "../Cv_Core/Cv_Core.csproj",
+      "msbuildProject": "../Cv_Core/Cv_Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "MonoAndroid,Version=v8.1": [
-      "Newtonsoft.Json >= 12.0.1",
-      "System.IO.Compression.ZipFile >= 4.3.0",
+      "Cv_Core >= 1.0.0",
+      "Newtonsoft.Json >= 12.0.2",
       "System.Net.Http >= 4.3.4",
       "Xam.Plugin.Connectivity >= 3.2.0",
       "Xamarin.Android.Support.Annotations >= 28.0.0.1",
       "Xamarin.Android.Support.Compat >= 28.0.0.1",
       "Xamarin.Android.Support.Design >= 28.0.0.1",
+      "Xamarin.Android.Support.v13 >= 28.0.0.1",
       "Xamarin.Android.Support.v7.CardView >= 28.0.0.1",
       "Xamarin.Essentials >= 1.1.0",
       "Xamarin.GooglePlayServices.Maps >= 60.1142.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\talabardj\\.nuget\\packages\\": {}
+    "C:\\Users\\jtalabar\\.nuget\\packages\\": {},
+    "C:\\ProgramData\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\talabardj\\Source\\Repos\\CvTalabardJérémy\\TalabardJeremyCv\\TalabardJeremyCv.csproj",
+      "projectUniqueName": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\TalabardJeremyCv\\TalabardJeremyCv.csproj",
       "projectName": "TalabardJeremyCv",
-      "projectPath": "C:\\Users\\talabardj\\Source\\Repos\\CvTalabardJérémy\\TalabardJeremyCv\\TalabardJeremyCv.csproj",
-      "packagesPath": "C:\\Users\\talabardj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\talabardj\\Source\\Repos\\CvTalabardJérémy\\TalabardJeremyCv\\obj\\",
+      "projectPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\TalabardJeremyCv\\TalabardJeremyCv.csproj",
+      "packagesPath": "C:\\Users\\jtalabar\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\TalabardJeremyCv\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
+      "fallbackFolders": [
+        "C:\\ProgramData\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
-        "C:\\Users\\talabardj\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\jtalabar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "monoandroid81"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://tfs02.cip.carrefour.com/nugetgallery/api/v2": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "monoandroid81": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Core\\Cv_Core.csproj": {
+              "projectPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Core\\Cv_Core.csproj"
+            }
+          }
         }
       }
     },
@@ -1213,11 +1222,7 @@
         "dependencies": {
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[12.0.1, )"
-          },
-          "System.IO.Compression.ZipFile": {
-            "target": "Package",
-            "version": "[4.3.0, )"
+            "version": "[12.0.2, )"
           },
           "System.Net.Http": {
             "target": "Package",
@@ -1236,6 +1241,10 @@
             "version": "[28.0.0.1, )"
           },
           "Xamarin.Android.Support.Design": {
+            "target": "Package",
+            "version": "[28.0.0.1, )"
+          },
+          "Xamarin.Android.Support.v13": {
             "target": "Package",
             "version": "[28.0.0.1, )"
           },

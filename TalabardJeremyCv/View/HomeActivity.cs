@@ -3,9 +3,6 @@ using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Gms.Common;
-using Android.Gms.Maps;
-using Android.Gms.Maps.Model;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
@@ -13,25 +10,29 @@ using Android.Support.V4.View;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
-using Android.Widget;
 using TalabardJeremyCv.XView.XFragment;
-using TalabardJeremyCv.Model;
-using FragmentManager = Android.Support.V4.App.FragmentManager;
-using TalabardJeremyCv.Controller.DAO;
+using System.Collections.Generic;
+using System.Linq;
+using Cv_Core.DataModel;
+using Cv_Core.DataManagement;
 
 namespace TalabardJeremyCv.XView
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", Icon ="@drawable/icon")]
-    public class HomeActivity : AppCompatActivity, NavigationView.IOnNavigationItemSelectedListener, IOnMapReadyCallback
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", Icon ="@drawable/icon",ConfigurationChanges = ConfigChanges.Orientation| ConfigChanges.ScreenSize)]
+    public class HomeActivity : AppCompatActivity, NavigationView.IOnNavigationItemSelectedListener
     {
         private Description description;
 
-        public static readonly int RC_INSTALL_GOOGLE_PLAY_SERVICES = 1000;
+        private static Android.App.Fragment currentFragment;
 
+        private static List<Android.App.Fragment> lastFragments;
+
+        public static readonly int RC_INSTALL_GOOGLE_PLAY_SERVICES = 1000;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            lastFragments = new List<Android.App.Fragment>();
             description = DataManager.GetInstance().Description();
 
             SetContentView(Resource.Layout.activity_main);
@@ -49,12 +50,17 @@ namespace TalabardJeremyCv.XView
 
 
             var detailsFrag = DescriptionFragment.NewInstance();
-            ChangeFragment(detailsFrag);
+            
+            if(currentFragment == null)
+            {
+                currentFragment = detailsFrag;
+            }
+            ChangeFragment(currentFragment);
 
             NavigationView navigationView = FindViewById<NavigationView>(Resource.Id.nav_view);
-
             navigationView.SetNavigationItemSelectedListener(this);
         }
+
 
         public override void OnBackPressed()
         {
@@ -62,6 +68,11 @@ namespace TalabardJeremyCv.XView
             if(drawer.IsDrawerOpen(GravityCompat.Start))
             {
                 drawer.CloseDrawer(GravityCompat.Start);
+            }
+            else if(lastFragments.Count > 0)
+            {
+                ChangeFragment(lastFragments.Last());
+                lastFragments.Remove(lastFragments.Last());
             }
             else
             {
@@ -87,7 +98,7 @@ namespace TalabardJeremyCv.XView
         }
         
 
-        private void ChangeFragment(Android.App.Fragment frag)
+        public void ChangeFragment(Android.App.Fragment frag)
         {
             if (FragmentManager.FindFragmentById(Resource.Id.container) == null)
             {
@@ -130,13 +141,16 @@ namespace TalabardJeremyCv.XView
                     fragment = new ListActivitiesFragment<Training>();
                     break;
                 case Resource.Id.nav_adresse:
-
-                    Intent i = new Intent(this, typeof(MapWithMarkersActivity));
-                    i.PutExtra("Lat", description.Lat);
-                    i.PutExtra("Long", description.Long);
-                    i.PutExtra("Adress", description.Adress);
-                    StartActivityFromChild(new MapWithMarkersActivity(), i,0);
-                    startNewActivity = true;
+                    Intent newIntentMaps = null;
+                    if(isAppInstalled(this, "com.android.maps") || isAppInstalled(this, "com.google.android.gms.maps"))
+                    {
+                        newIntentMaps = new Intent(Intent.ActionView, Android.Net.Uri.Parse("geo:"+description.Lat+","+description.Long+"?q="+description.Adress));
+                    }
+                    else
+                    {
+                        newIntentMaps = new Intent(Intent.ActionView, Android.Net.Uri.Parse("https://www.google.com/maps/place/" + description.Adress + "/@" + description.Lat + "," + description.Long));
+                    }
+                    StartActivity(newIntentMaps);
                     break;
                 case Resource.Id.nav_project:
                     fragment = new ListActivitiesFragment<Project>();
@@ -145,19 +159,45 @@ namespace TalabardJeremyCv.XView
                     fragment = new ListActivitiesFragment<PersonalProject>();
                     break;
                 case Resource.Id.nav_facebook:
-                   // fragment = DescriptionFragment.NewInstance();
+                    Intent newIntent = null;
+                    try
+                    {
+                        if (isAppInstalled(this, "com.facebook.orca") || isAppInstalled(this, "com.facebook.katana")
+                                || isAppInstalled(this, "com.example.facebook") || isAppInstalled(this, "com.facebook.android"))
+                        {
+
+                            newIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse("fb://page/jeremy.talabard"));
+                        }
+                        else
+                        {
+                            newIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(description.FbLink));
+                        }
+                    }
+                    catch { newIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(description.FbLink)); }
+                    StartActivity(newIntent);
                     break;
                 case Resource.Id.nav_hobie:
-                    fragment = new ListActivitiesFragment<Job>();
-                    break;
-                case Resource.Id.nav_job:
                     fragment = new ListActivitiesFragment<Hobie>();
                     break;
+                case Resource.Id.nav_job:
+                    fragment = new ListActivitiesFragment<Job>();
+                    break;
                 case Resource.Id.nav_linkedin:
-                   // fragment = DescriptionFragment.NewInstance();
+                    try
+                    {
+                        Intent linkedinIntent = new Intent(Intent.ActionView);
+                        linkedinIntent.SetData(Android.Net.Uri.Parse(description.LinkedinLink));
+                        linkedinIntent.SetPackage("com.linkedin.android");
+                        StartActivity(linkedinIntent);
+                    }
+                    catch
+                    {
+                        StartActivity(new Intent(Intent.ActionView,
+                                Android.Net.Uri.Parse(description.LinkedinLink)));
+                    }
                     break;
                 case Resource.Id.nav_knowledges:
-                  //  fragment = DescriptionFragment.NewInstance();
+                    fragment = new KnowledgeFragment();
                     break;
                 case Resource.Id.nav_phone:
                     if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.CallPhone) == (int)Permission.Granted)
@@ -168,8 +208,7 @@ namespace TalabardJeremyCv.XView
                     }
                     else
                     {
-                        // call permission is not granted. If necessary display rationale & request.
-                        Toast.MakeText(this, Constants.MESSAGE_CALL_PERMISSION_DENIED, ToastLength.Short).Show();
+                        Android.Support.V4.App.ActivityCompat.RequestPermissions(this, new String[] { Manifest.Permission.CallPhone }, 5);
                     }
                    
                     break;
@@ -190,6 +229,11 @@ namespace TalabardJeremyCv.XView
             if(fragment != null && !startNewActivity)
             {
                 ChangeFragment(fragment);
+                if (!lastFragments.Contains(currentFragment))
+                {
+                    lastFragments.Add(currentFragment);
+                }
+                currentFragment = fragment;
             }
             
             DrawerLayout drawer = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
@@ -197,52 +241,17 @@ namespace TalabardJeremyCv.XView
             return true;
         }
 
-        public void OnMapReady(GoogleMap googleMap)
+        private static bool isAppInstalled(Context context, String packageName)
         {
-            googleMap.UiSettings.ZoomControlsEnabled = true;
-            googleMap.UiSettings.CompassEnabled = true;
-            LatLng location = new LatLng(50.897778, 3.013333);
-
-            CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
-            builder.Target(location);
-            builder.Zoom(18);
-            builder.Bearing(155);
-            builder.Tilt(65);
-
-            MarkerOptions markerOpt1 = new MarkerOptions();
-            markerOpt1.SetPosition(new LatLng(description.Lat, description.Long));
-            markerOpt1.SetTitle(description.Adress);
-
-            googleMap.AddMarker(markerOpt1);
-
-            CameraPosition cameraPosition = builder.Build();
-
-            CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
-
-            googleMap.MoveCamera(cameraUpdate);
-
-            
-        }
-
-
-        bool TestIfGooglePlayServicesIsInstalled()
-        {
-            var queryResult = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
-            if (queryResult == ConnectionResult.Success)
+            try
             {
+                context.PackageManager.GetApplicationInfo(packageName, 0);
                 return true;
             }
-
-            if (GoogleApiAvailability.Instance.IsUserResolvableError(queryResult))
+            catch
             {
-                var errorString = GoogleApiAvailability.Instance.GetErrorString(queryResult);
-                Dialog errorDialog = GoogleApiAvailability.Instance.GetErrorDialog(this, queryResult, RC_INSTALL_GOOGLE_PLAY_SERVICES);
-                var dialogFrag = new XView.XFragment.ErrorDialogFragment(errorDialog);
-
-                dialogFrag.Show(FragmentManager, "GooglePlayServicesDialog");
+                return false;
             }
-
-            return false;
         }
 
 

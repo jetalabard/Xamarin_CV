@@ -9,8 +9,8 @@
     <string name="setting_Prompt">Choisir un mode de rafraîchisssement</string>
   <string name="adress">Adresse</string>
     <string-array name="refresh_mode">
-      <item>Seulement au démarrage</item>
-      <item>Toutes les 5 minutes</item>
-      <item>Toutes les 30 secondes</item>
+      <item>Tous les jours</item>
+      <item>A chaque démarrage</item>
+      <item>Toutes les semaines</item>
     </string-array>
 </resources>

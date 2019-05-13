@@ -1,103 +1,157 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
+using System.Threading;
 using System.Threading.Tasks;
 using Android;
 using Android.App;
-using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Util;
+using Android.Views;
 using Android.Widget;
-using TalabardJeremyCv.Controller.DAO;
-using TalabardJeremyCv.Controller.Downloader;
+using Cv_Core;
+using Cv_Core.ConfigurationManagement;
+using Cv_Core.DataManagement;
+using Cv_Core.Downloader;
+using TalabardJeremyCv.Controller;
+using TalabardJeremyCv.Controller.Configuration;
 using TalabardJeremyCv.Controller.Services;
-using TalabardJeremyCv.Model;
+using Xamarin.Essentials;
 
 namespace TalabardJeremyCv.XView
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.Splash", MainLauncher = true, NoHistory = true)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.Splash", MainLauncher = true, NoHistory = true, LaunchMode = LaunchMode.SingleTop)]
     public class SplashScreenActivity : AppCompatActivity
     {
+        private ProgressBar mProgress;
 
-        private IDownloader _Downloader = new Downloader();
+        private IDownloader _Downloader = new Downloader(new DirectoryAndroidManager());
 
+        private bool _IsDev;
+
+        private string _UrlDatabase;
+        private string _UrlImage;
+
+        private string _DownloadDirectoryPath;
+        private string _ImgDirectoryPath;
         private int _NbFileDownloaded = 0;
 
-        public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState, persistentState);
-
+            base.OnCreate(savedInstanceState);
+            ConfigurationManager.Initialize(new AndroidConfigurationStreamProviderFactory(() => this));
+            DirectoryAndroidManager dirManager = new DirectoryAndroidManager();
+            using (var cts = new CancellationTokenSource())
+            {
+                // Create or get a cancellation token from somewhere
+                var config = await ConfigurationManager.Instance.GetAsync(cts.Token);
+                _IsDev = config.Dev;
+                _UrlDatabase = config.DatabaseUrl;
+                _UrlImage = config.ImageUrl;
+                dirManager._DownloadDirectoryName = config.DownloadDirectoryName;
+                dirManager._ImgDirectoryName = config.ImageDirectoryName;
+            }
+            _ImgDirectoryPath = dirManager.GetImageDirectory();
+            _DownloadDirectoryPath = dirManager.GetDownlaodDirectory();
+            ImageManager.GetInstance(_ImgDirectoryPath);
         }
 
         // Launches the startup task
-        protected override void OnResume()
+        protected override async void OnResume()
         {
+
             base.OnResume();
-            Task startupWork = new Task(() =>
+
+            if (CheckInternet.HasConnexion() || CheckIsDownload())
             {
-                if (CheckInternet.HasConnexion())
+
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    SimulateStartup();
+                    SetContentView(Resource.Layout.splash);
+                    mProgress = FindViewById<ProgressBar>(Resource.Id.SplashProgressBar);
+                    mProgress.Visibility = ViewStates.Visible;
+                });
+                SimulateStartup();
+            }
+            else
+            {
+                if (await CheckInternet.ShowMessageIfNotConnected(this) == Controller.ShowDialog.MessageResult.YES)
+                {
+                    OnResume();
                 }
                 else
                 {
-                    CheckInternet.ShowMessageIfNotConnected(this);
                     StopApplication();
                 }
-            });
-            startupWork.Start();
+            }
+                
         }
 
-        async void StopApplication()
+        private async void StopApplication()
         {
-            await Task.Delay(5000); // Simulate a bit of startup work.
+            await Task.Delay(2000); // Simulate a bit of startup work.
+            HideProgressBar();
             FinishAffinity();
         }
 
         // Simulates background work that happens behind the splash screen
-        void SimulateStartup()
+        private void SimulateStartup()
         {
-            string date = SharedPreferenceManager.GetString(ApplicationContext, "date_download_database", "");
-            if (date == "" || Convert.ToDateTime(date) < DateTime.Now.AddDays(-1))
+            if (!CheckIsDownload() || !File.Exists(Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME)))
             {
                 if (Controller.Permission.CheckPermission.PermissionGranted(ApplicationContext, Manifest.Permission.WriteExternalStorage))
                 {
                     //save temporary file
                     _Downloader.OnFileDownloaded += OnFileDownloaded;
-                    _Downloader.DownloadFile("https://www.dropbox.com/s/jlojnxpfj7iyxcs/database_cv.xml?dl=1", Constants.DOWNLOAD_DIRECTORY, "Database_cv.xml");
-                    _Downloader.DownloadFile("https://www.dropbox.com/sh/agqxwfduq54sdg9/AADaoBJGIu7x-QhON6I0xlYha?dl=1", Constants.DOWNLOAD_DIRECTORY, "Img.zip");
+                    // Use the configuration value
+                    _Downloader.DownloadFile(_UrlDatabase, _DownloadDirectoryPath, Constants.DATABASE_FILE_NAME);
+                    _Downloader.DownloadFile(_UrlImage, _DownloadDirectoryPath, Constants.IMG_FILE_NAME);
+
                 }
                 else
                 {
-                    Toast.MakeText(ApplicationContext, "Permission non accordée pour l'écriture de fichier, aller dans les paramètres de l'application pour modifier cette valeur.", ToastLength.Long).Show();
+                    Android.Support.V4.App.ActivityCompat.RequestPermissions(this, new String[] { Manifest.Permission.WriteExternalStorage }, 5);
+                    OnResume();
+
                 }
             }
             else
             {
                 Log.Debug("Download", "Database already save");
-                DataManager.GetInstance(SharedPreferenceManager.GetString(ApplicationContext, "path_database", ""));
+                DataManager.GetInstance(_IsDev, SharedPreferenceManager.GetString(ApplicationContext, Constants.SHARED_DATABASE_PATH, ""));
+                HideProgressBar();
                 StartActivity(typeof(HomeActivity));
                 Finish();
             }
         }
+
+
         private void OnFileDownloaded(object sender, DownloadEventArgs e)
         {
             if (e.FileSaved)
             {
-                Log.Debug("Download","File have been downloaded with success");
+                Log.Debug("Download", "File have been downloaded with success");
                 _NbFileDownloaded++;
                 if (_NbFileDownloaded == 2)
                 {
-                    SharedPreferenceManager.SaveString(ApplicationContext, "date_download_database", DateTime.Now.ToString());
-                    SharedPreferenceManager.SaveString(ApplicationContext, "path_database", Path.Combine(Downloader.ExternalStorage, Constants.DOWNLOAD_DIRECTORY +"/Database_cv.xml"));
-                    DataManager.GetInstance(SharedPreferenceManager.GetString(ApplicationContext,"path_database",""));
-                    ZipFile.ExtractToDirectory(Path.Combine(Downloader.ExternalStorage, Constants.DOWNLOAD_DIRECTORY+"/Img.zip"), Path.Combine(Path.Combine(Downloader.ExternalStorage, "CV_Download"), "img"));
+                    SharedPreferenceManager.SaveString(ApplicationContext, Constants.DATE_DOWNLAOD, DateTime.Now.ToString());
+                    SharedPreferenceManager.SaveString(ApplicationContext, Constants.SHARED_DATABASE_PATH, Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME));
+
+                    if (Controller.Permission.CheckPermission.PermissionGranted(ApplicationContext, Manifest.Permission.ReadExternalStorage))
+                    {
+                        DataManager.GetInstance(_IsDev, SharedPreferenceManager.GetString(ApplicationContext, Constants.SHARED_DATABASE_PATH, ""));
+                        string pathZipFile = Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME);
+                        ZipManager.Unzip(pathZipFile, _ImgDirectoryPath);
+                    }
+                    else
+                    {
+                        Toast.MakeText(ApplicationContext, "Permission non accordée pour la lecture du fichier, aller dans les paramètres de l'application pour modifier cette valeur.", ToastLength.Long).Show();
+                    }
 
                     //delete temporary file after get values
-                    File.Delete(Path.Combine(Downloader.ExternalStorage, Constants.DOWNLOAD_DIRECTORY+"/Img.zip"));
-                   
+                    File.Delete(Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME));
+                    HideProgressBar();
                     StartActivity(typeof(HomeActivity));
                     Finish();
                 }
@@ -107,7 +161,36 @@ namespace TalabardJeremyCv.XView
                 Log.Error("Download", "Error while saving the file");
             }
         }
-      
+
+
+        private bool CheckIsDownload()
+        {
+            string date = SharedPreferenceManager.GetString(ApplicationContext, Constants.DATE_DOWNLAOD, "");
+            string parameter = SharedPreferenceManager.GetString(ApplicationContext, Constants.REFRESH_MODE_PREFERENCES, "");
+            switch (parameter)
+            {
+                case "Tous les jours":
+                    return date != "" || Convert.ToDateTime(date) >= DateTime.Now.AddDays(-1);
+                case "A chaque démarrage":
+                    return false;
+                case "Toutes les semaines":
+                    return date != "" || Convert.ToDateTime(date) >= DateTime.Now.AddDays(-7); ;
+                default:
+                    return date != "" || Convert.ToDateTime(date) >= DateTime.Now.AddDays(-1);
+            }
+
+        }
+
         public override void OnBackPressed() { }
+
+        private void HideProgressBar()
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (mProgress != null)
+                    mProgress.Visibility = ViewStates.Gone;
+                Task.Delay(1500);
+            });
+        }
     }
 }
