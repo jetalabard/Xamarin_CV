@@ -63,6 +63,7 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\AndroidCreateImage.cs" />
     <Compile Include="Controller\Configuration\AndroidConfigurationStreamProvider.cs" />
     <Compile Include="Controller\Configuration\AndroidConfigurationStreamProviderFactory.cs" />
     <Compile Include="Controller\DirectoryAndroidManager.cs" />
@@ -369,6 +370,10 @@
     <ProjectReference Include="..\Cv_Core\Cv_Core.csproj">
       <Project>{987ea147-4319-4b95-99a3-ab24636094fd}</Project>
       <Name>Cv_Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cv_Forms\Cv_Forms\Cv_Forms.csproj">
+      <Project>{354B6C6C-AF14-4029-B17A-C9DC81687099}</Project>
+      <Name>Cv_Forms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

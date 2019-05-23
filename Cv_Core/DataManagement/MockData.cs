@@ -34,12 +34,12 @@ namespace Cv_Core.DataManagement
             };
         }
 
-        public IList<Header> Headers()
+        public ICollection<Header> Headers()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Hobie> Hobies()
+        public ICollection<Hobie> Hobies()
         {
             return new List<Hobie>
         {
@@ -66,32 +66,32 @@ namespace Cv_Core.DataManagement
             };
         }
 
-        public IList<Job> Jobs()
+        public ICollection<Job> Jobs()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Knowledge> Knowledges()
+        public ICollection<Knowledge> Knowledges()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Link> Links()
+        public ICollection<Link> Links()
         {
             throw new NotImplementedException();
         }
 
-        public IList<PersonalProject> PersonalProjects()
+        public ICollection<PersonalProject> PersonalProjects()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Project> Projects()
+        public ICollection<Project> Projects()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Training> Trainings()
+        public ICollection<Training> Trainings()
         {
             return new List<Training>
         {

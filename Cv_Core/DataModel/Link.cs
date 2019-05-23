@@ -6,18 +6,18 @@ namespace Cv_Core.DataModel
     public class Link : AbstractEntity<Link>
     {
 
-        public int IdLinks;
+        public int IdLinks { get; set; }
 
-        public string LinkTitle;
+        public string LinkTitle { get; set; }
 
-        public string Url;
+        public string Url { get; set; }
 
-        public bool Important;
+        public bool Important { get; set; }
 
-        public bool IsUrl;
+        public bool IsUrl { get; set; }
 
-        public string Title;
-        
+        public string Title { get; set; }
+
         public Link(XmlNode node) : base(node) { }
 
         public override void ReadXml(XmlNode node)

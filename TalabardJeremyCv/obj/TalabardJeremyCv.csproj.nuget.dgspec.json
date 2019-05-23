@@ -62,6 +62,92 @@
         }
       }
     },
+    "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Forms\\Cv_Forms\\Cv_Forms.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Forms\\Cv_Forms\\Cv_Forms.csproj",
+        "projectName": "Cv_Forms",
+        "projectPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Forms\\Cv_Forms\\Cv_Forms.csproj",
+        "packagesPath": "C:\\Users\\jtalabar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Forms\\Cv_Forms\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\ProgramData\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jtalabar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Core\\Cv_Core.csproj": {
+                "projectPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Core\\Cv_Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "MR.Gestures": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Plugin.Permissions": {
+              "target": "Package",
+              "version": "[3.0.0.12, )"
+            },
+            "Xam.Plugin.Connectivity": {
+              "target": "Package",
+              "version": "[3.2.0, )"
+            },
+            "Xam.Plugins.Forms.ImageCircle": {
+              "target": "Package",
+              "version": "[3.0.0.5, )"
+            },
+            "Xamarin.Essentials": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            },
+            "Xamarin.Forms": {
+              "target": "Package",
+              "version": "[4.0.0.425677, )"
+            },
+            "Xamarin.Forms.Maps": {
+              "target": "Package",
+              "version": "[4.0.0.425677, )"
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
     "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\TalabardJeremyCv\\TalabardJeremyCv.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -92,6 +178,9 @@
             "projectReferences": {
               "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Core\\Cv_Core.csproj": {
                 "projectPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Core\\Cv_Core.csproj"
+              },
+              "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Forms\\Cv_Forms\\Cv_Forms.csproj": {
+                "projectPath": "C:\\Users\\jtalabar\\source\\repos\\Xamarin_CV\\Cv_Forms\\Cv_Forms\\Cv_Forms.csproj"
               }
             }
           }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Cv_Core;
@@ -51,7 +52,7 @@ namespace TalabardJeremyCv.Model
             }
             if(list != null && list[position] != null)
             {
-                imageView.SetImageBitmap(ImageManager.GetBitmapFromPath(list[position].Image));
+                imageView.SetImageBitmap(ImageManager<Bitmap>.GetInstance().GetImageFromPath(list[position].Image));
             }
             return imageView;
         }

@@ -6,9 +6,9 @@ namespace Cv_Forms.Droid.Controller
 {
     public class CloseApplication : ICloseApplication
     {
-        public void CloseApplicationProcess()
+        public void FinishApplication()
         {
-            ((Activity)Application.Context).FinishAffinity();
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
         }
     }
 }

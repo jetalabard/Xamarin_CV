@@ -1,12 +1,12 @@
-﻿using Cv_Core;
+﻿
+using Cv_Core;
+using Cv_Core.ConfigurationManagement;
 using Cv_Core.DataManagement;
 using Cv_Core.Downloader;
 using Cv_Forms.Controller;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
-using ProgressRingControl.Forms.Plugin;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -18,56 +18,54 @@ namespace Cv_Forms.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Splash : ContentPage
     {
-        private ProgressBar _ProgressBar;
+        private App _App;
 
-        private IDownloader _Downloader = new Downloader(new DirectoryDefaultManager());
+        private const int SIZE_PROGRESS_LONG = 1800;
+
+        private const int SIZE_PROGRESS_SMALL = 900;
+
+        private IDownloader _Downloader = new Downloader();
 
         private string _DownloadDirectoryPath;
         private string _ImgDirectoryPath;
-
-        private string _UrlImage;
-        private string _UrlDatabase;
-
-        private bool _IsDev;
         private int _NbFileDownloaded = 0;
-
-        public Splash(bool isDev, string urlDatabase, string urlImage, string imgDirectoryPath, string downloadDirectoryPath)
+        
+        public Splash(App app)
         {
+            _App = app;
             InitializeComponent();
-            Image imageSplash = this.FindByName<Image>("SplashImage");
-            imageSplash.Source = "icon.png";
-
-            _ProgressBar = this.FindByName<ProgressBar>("SplashProgressBar");
-
-            
-            _DownloadDirectoryPath = downloadDirectoryPath;
-            _ImgDirectoryPath = imgDirectoryPath;
-            _UrlImage = urlImage;
-            _UrlDatabase = urlDatabase;
-            _IsDev = isDev;
-            RunDataProcess();
-
         }
 
-        protected async void RunDataProcess()
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ShowImageAndDownload();
+        }
+
+        private async void ShowImageAndDownload()
+        {
+            Image image = this.FindByName<Image>("SplashImage");
+            image.Opacity = 0;
+            await image.FadeTo(10, 1000);
+
+            DownloadIfNecessary();
+        }
+
+        private async void DownloadIfNecessary()
         {
             if (CheckInternet.HasConnexion() || CheckIsDownload())
             {
-
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    _ProgressBar.IsVisible = true;
-                });
+                ProgressBar.IsVisible = true;
                 await SimulateStartup();
             }
             else
             {
-                if(await DisplayAlert("Erreur",
-                      "Pas de connection internet, activer le Wifi ou les données mobiles et rééssayer!",
-                      "Réésayer",
-                      "Quitter"))
+                if (await DisplayAlert("Erreur",
+                     "Pas de connection internet, activer le Wifi ou les données mobiles et rééssayer!",
+                     "Réésayer",
+                     "Quitter"))
                 {
-                    OnAppearing();
+                    DownloadIfNecessary();
                 }
                 else
                 {
@@ -76,64 +74,12 @@ namespace Cv_Forms.Views
             }
         }
 
-        private async void StopApplication()
+        private void StopApplication()
         {
-            await Task.Delay(2000); // Simulate a bit of startup work.
-            HideProgressBar();
-            var closer = DependencyService.Get<ICloseApplication>();
-            closer.CloseApplicationProcess();
-        }
-
-        private void HideProgressBar()
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                _ProgressBar.IsVisible = false;
+            MainThread.BeginInvokeOnMainThread(() => { 
+                var closer = DependencyService.Get<ICloseApplication>();
+                closer.FinishApplication();
             });
-        }
-
-        private bool CheckIsDownload()
-        {
-            string date = Preferences.Get(Constants.DATE_DOWNLAOD, "");
-            string parameter = Preferences.Get(Constants.REFRESH_MODE_PREFERENCES, "");
-            switch (parameter)
-            {
-                case "Tous les jours":
-                    return date != "" || Convert.ToDateTime(date) >= DateTime.Now.AddDays(-1);
-                case "A chaque démarrage":
-                    return false;
-                case "Toutes les semaines":
-                    return date != "" || Convert.ToDateTime(date) >= DateTime.Now.AddDays(-7); ;
-                default:
-                    return date != "" || Convert.ToDateTime(date) >= DateTime.Now.AddDays(-1);
-            }
-
-        }
-
-
-
-        private async Task SimulateStartup()
-        {
-            var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
-            if (status == PermissionStatus.Granted)
-            {
-                _Downloader.OnFileDownloaded += OnFileDownloaded;
-                // Use the configuration value
-                _Downloader.DownloadFile(_UrlDatabase, _DownloadDirectoryPath, Constants.DATABASE_FILE_NAME);
-                _Downloader.DownloadFile(_UrlImage, _DownloadDirectoryPath, Constants.IMG_FILE_NAME);
-
-                await Task.Delay(1);
-            }
-            else
-            {
-                await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Storage);
-                var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Storage);
-                //Best practice to always check that the key exists
-                if (results.ContainsKey(Permission.Storage))
-                {
-                    OnAppearing();
-                }
-            }
         }
 
         private void OnFileDownloaded(object sender, DownloadEventArgs e)
@@ -142,20 +88,21 @@ namespace Cv_Forms.Views
             {
                 Log.Warning("Download", "File have been downloaded with success");
                 _NbFileDownloaded++;
+
+                ProgressBar.ProgressTo(ProgressBar.Progress + 0.3, SIZE_PROGRESS_LONG, Easing.Linear);
                 if (_NbFileDownloaded == 2)
                 {
                     Preferences.Set(Constants.DATE_DOWNLAOD, DateTime.Now.ToString());
                     Preferences.Set(Constants.SHARED_DATABASE_PATH, Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME));
 
-                        DataManager.GetInstance(_IsDev, Preferences.Get(Constants.SHARED_DATABASE_PATH, ""));
-                        string pathZipFile = Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME);
-                        ZipManager.Unzip(pathZipFile, _ImgDirectoryPath);
-
+                    DataManager.GetInstance(ConfigInstance.GetInstance().IsDev, Preferences.Get(Constants.SHARED_DATABASE_PATH, ""));
+                    string pathZipFile = Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME);
+                    ZipManager.Unzip(pathZipFile, _ImgDirectoryPath);
 
                     //delete temporary file after get values
                     File.Delete(Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME));
-                    HideProgressBar();
-                    Navigation.PushAsync(new MainPage());
+                    ProgressBar.ProgressTo(0.99, SIZE_PROGRESS_LONG, Easing.Linear);
+                    _App.ChangePage(new MainPage());
                 }
             }
             else
@@ -164,5 +111,46 @@ namespace Cv_Forms.Views
             }
         }
 
+        private bool CheckIsDownload()
+        {
+            string date = Preferences.Get(Constants.DATE_DOWNLAOD, string.Empty);
+            double parameter = Preferences.Get(Constants.REFRESH_MODE_PREFERENCES_DAYS, 1.0);
+            return date != string.Empty 
+                ? Convert.ToDateTime(date) >= DateTime.Now.AddDays(-1 * parameter) 
+                : false;
+
+        }
+
+        public async Task SimulateStartup()
+        {
+            DirectoryDefaultManager dirManager = new DirectoryDefaultManager();
+            
+            _ImgDirectoryPath = dirManager.GetImageDirectory();
+            _DownloadDirectoryPath = dirManager.GetDownlaodDirectory();
+
+            if (!CheckIsDownload() || !File.Exists(Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME)) || !Directory.Exists(_ImgDirectoryPath))
+            {
+                await ProgressBar.ProgressTo(0.1, SIZE_PROGRESS_LONG, Easing.Linear);
+                //save temporary file
+                _Downloader.OnFileDownloaded += OnFileDownloaded;
+                // Use the configuration value
+                _Downloader.DownloadFile(ConfigInstance.GetInstance().DatabaseUrl, _DownloadDirectoryPath, Constants.DATABASE_FILE_NAME);
+                _Downloader.DownloadFile(ConfigInstance.GetInstance().ImageUrl, _DownloadDirectoryPath, Constants.IMG_FILE_NAME);
+
+                await ProgressBar.ProgressTo(0.2, SIZE_PROGRESS_LONG, Easing.Linear);
+
+            }
+            else
+            {
+                Log.Warning("Download", "Database already save");
+                DataManager.GetInstance(ConfigInstance.GetInstance().IsDev, Preferences.Get(Constants.SHARED_DATABASE_PATH, ""));
+
+                await ProgressBar.ProgressTo(0.99, SIZE_PROGRESS_SMALL, Easing.Linear);
+                _App.ChangePage(new MainPage());
+
+            }
+
+
+        }
     }
 }

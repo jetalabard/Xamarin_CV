@@ -1,4 +1,5 @@
 ﻿using Cv_Core.DataModel;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -31,6 +32,10 @@ namespace Cv_Core
 
         public XmlReader(string xmlFile)
         {
+            if (string.IsNullOrEmpty(xmlFile))
+            {
+                throw new ArgumentException("path of xml file Database must be initialized");
+            }
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlFile);
             XmlNodeList elemList = doc.GetElementsByTagName(Constants.TABLE);

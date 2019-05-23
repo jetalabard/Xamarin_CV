@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Android;
 using Android.App;
 using Android.Content;
 using Android.Graphics.Drawables;
@@ -6,6 +8,7 @@ using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using Cv_Core.DataModel;
+using Java.IO;
 
 namespace TalabardJeremyCv.Model
 {
@@ -29,6 +32,8 @@ namespace TalabardJeremyCv.Model
 }
 
     public override int Count => links.Count;
+
+        public int CompletedDownloadApk { get; private set; }
 
         public override long GetItemId(int position)
         {
@@ -73,10 +78,22 @@ namespace TalabardJeremyCv.Model
             return view;
         }
 
+        private void InstallAPK(File apkFile)
+        {
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.AddCategory("android.intent.category.DEFAULT");
+            intent.SetDataAndType(Android.Net.Uri.FromFile(apkFile), "application/vnd.android.package-archive");
+            _Context.StartActivity(intent);
+        }
+
         private void BtnOneClick(int position)
         {
             Link l = links[position];
-            if (l.IsUrl)
+            if (l.LinkTitle.Contains(".apk"))
+            {
+                Download(l);
+            }
+            else if (l.IsUrl)
             {
                 var uri = Android.Net.Uri.Parse(l.Url);
                 var intent = new Intent(Intent.ActionView, uri);
@@ -84,14 +101,19 @@ namespace TalabardJeremyCv.Model
             }
             else
             {
-                var source = Android.Net.Uri.Parse(l.Url);
-                var request = new DownloadManager.Request(source);
-                request.AllowScanningByMediaScanner();
-                request.SetNotificationVisibility(DownloadVisibility.VisibleNotifyCompleted);
-                request.SetDestinationInExternalPublicDir(Android.OS.Environment.DirectoryDownloads, source.LastPathSegment);
-                var manager = (DownloadManager)_Context.GetSystemService(Context.DownloadService);
-                manager.Enqueue(request);
+                Download(l);
             }
+        }
+
+        private void Download(Link l)
+        {
+            var source = Android.Net.Uri.Parse(l.Url);
+            var request = new DownloadManager.Request(source);
+            request.AllowScanningByMediaScanner();
+            request.SetNotificationVisibility(DownloadVisibility.VisibleNotifyCompleted);
+            request.SetDestinationInExternalPublicDir(Android.OS.Environment.DirectoryDownloads, source.LastPathSegment);
+            var manager = (DownloadManager)_Context.GetSystemService(Context.DownloadService);
+            manager.Enqueue(request);
         }
 
     }

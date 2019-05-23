@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Android;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Util;
@@ -14,6 +15,7 @@ using Cv_Core;
 using Cv_Core.ConfigurationManagement;
 using Cv_Core.DataManagement;
 using Cv_Core.Downloader;
+using Cv_Forms.Controller;
 using TalabardJeremyCv.Controller;
 using TalabardJeremyCv.Controller.Configuration;
 using TalabardJeremyCv.Controller.Services;
@@ -28,11 +30,6 @@ namespace TalabardJeremyCv.XView
 
         private IDownloader _Downloader = new Downloader(new DirectoryAndroidManager());
 
-        private bool _IsDev;
-
-        private string _UrlDatabase;
-        private string _UrlImage;
-
         private string _DownloadDirectoryPath;
         private string _ImgDirectoryPath;
         private int _NbFileDownloaded = 0;
@@ -41,20 +38,16 @@ namespace TalabardJeremyCv.XView
         {
             base.OnCreate(savedInstanceState);
             ConfigurationManager.Initialize(new AndroidConfigurationStreamProviderFactory(() => this));
-            DirectoryAndroidManager dirManager = new DirectoryAndroidManager();
+            DirectoryDefaultManager dirManager = new DirectoryDefaultManager();
             using (var cts = new CancellationTokenSource())
             {
                 // Create or get a cancellation token from somewhere
                 var config = await ConfigurationManager.Instance.GetAsync(cts.Token);
-                _IsDev = config.Dev;
-                _UrlDatabase = config.DatabaseUrl;
-                _UrlImage = config.ImageUrl;
-                dirManager._DownloadDirectoryName = config.DownloadDirectoryName;
-                dirManager._ImgDirectoryName = config.ImageDirectoryName;
+                ConfigInstance.GetInstance(config);
             }
             _ImgDirectoryPath = dirManager.GetImageDirectory();
             _DownloadDirectoryPath = dirManager.GetDownlaodDirectory();
-            ImageManager.GetInstance(_ImgDirectoryPath);
+            ImageManager<Bitmap>.GetInstance(_ImgDirectoryPath, new AndroidCreateImage());
         }
 
         // Launches the startup task
@@ -98,15 +91,15 @@ namespace TalabardJeremyCv.XView
         // Simulates background work that happens behind the splash screen
         private void SimulateStartup()
         {
-            if (!CheckIsDownload() || !File.Exists(Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME)))
+            if (!CheckIsDownload() || !File.Exists(System.IO.Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME)))
             {
                 if (Controller.Permission.CheckPermission.PermissionGranted(ApplicationContext, Manifest.Permission.WriteExternalStorage))
                 {
                     //save temporary file
                     _Downloader.OnFileDownloaded += OnFileDownloaded;
                     // Use the configuration value
-                    _Downloader.DownloadFile(_UrlDatabase, _DownloadDirectoryPath, Constants.DATABASE_FILE_NAME);
-                    _Downloader.DownloadFile(_UrlImage, _DownloadDirectoryPath, Constants.IMG_FILE_NAME);
+                    _Downloader.DownloadFile(ConfigInstance.GetInstance().DatabaseUrl, _DownloadDirectoryPath, Constants.DATABASE_FILE_NAME);
+                    _Downloader.DownloadFile(ConfigInstance.GetInstance().ImageUrl, _DownloadDirectoryPath, Constants.IMG_FILE_NAME);
 
                 }
                 else
@@ -119,7 +112,7 @@ namespace TalabardJeremyCv.XView
             else
             {
                 Log.Debug("Download", "Database already save");
-                DataManager.GetInstance(_IsDev, SharedPreferenceManager.GetString(ApplicationContext, Constants.SHARED_DATABASE_PATH, ""));
+                DataManager.GetInstance(ConfigInstance.GetInstance().IsDev, SharedPreferenceManager.GetString(ApplicationContext, Constants.SHARED_DATABASE_PATH, ""));
                 HideProgressBar();
                 StartActivity(typeof(HomeActivity));
                 Finish();
@@ -136,12 +129,12 @@ namespace TalabardJeremyCv.XView
                 if (_NbFileDownloaded == 2)
                 {
                     SharedPreferenceManager.SaveString(ApplicationContext, Constants.DATE_DOWNLAOD, DateTime.Now.ToString());
-                    SharedPreferenceManager.SaveString(ApplicationContext, Constants.SHARED_DATABASE_PATH, Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME));
+                    SharedPreferenceManager.SaveString(ApplicationContext, Constants.SHARED_DATABASE_PATH, System.IO.Path.Combine(_DownloadDirectoryPath, Constants.DATABASE_FILE_NAME));
 
                     if (Controller.Permission.CheckPermission.PermissionGranted(ApplicationContext, Manifest.Permission.ReadExternalStorage))
                     {
-                        DataManager.GetInstance(_IsDev, SharedPreferenceManager.GetString(ApplicationContext, Constants.SHARED_DATABASE_PATH, ""));
-                        string pathZipFile = Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME);
+                        DataManager.GetInstance(ConfigInstance.GetInstance().IsDev, SharedPreferenceManager.GetString(ApplicationContext, Constants.SHARED_DATABASE_PATH, ""));
+                        string pathZipFile = System.IO.Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME);
                         ZipManager.Unzip(pathZipFile, _ImgDirectoryPath);
                     }
                     else
@@ -150,7 +143,7 @@ namespace TalabardJeremyCv.XView
                     }
 
                     //delete temporary file after get values
-                    File.Delete(Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME));
+                    File.Delete(System.IO.Path.Combine(_DownloadDirectoryPath, Constants.IMG_FILE_NAME));
                     HideProgressBar();
                     StartActivity(typeof(HomeActivity));
                     Finish();

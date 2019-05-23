@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewsModel="clr-namespace:Cv_Forms.ViewModels"
+             x:Class="Cv_Forms.Views.ActivitiesPage"
+             x:Name="ActPage"
+             Title="{Binding Title}">
+
+    <StackLayout Orientation="Vertical">
+
+        <AbsoluteLayout  HorizontalOptions="FillAndExpand"  VerticalOptions="FillAndExpand">
+            <ScrollView AbsoluteLayout.LayoutFlags="All"
+                    AbsoluteLayout.LayoutBounds="0,1,1,1"
+                    VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <StackLayout BackgroundColor="#2c3e50" Padding="20,0,0,10" Orientation="Horizontal">
+                        <Label Text="{Binding Subtitle}" TextColor="White" HorizontalOptions="FillAndExpand" />
+                    </StackLayout>
+                    <StackLayout x:Name="Content" Margin="10"/>
+                </StackLayout>
+            </ScrollView>
+
+
+            <ContentView x:Name="popupImageView" BackgroundColor="#C0808080" Padding="10, 0" IsVisible="false"  
+                         HorizontalOptions="FillAndExpand"  VerticalOptions="FillAndExpand"
+                         AbsoluteLayout.LayoutBounds="0, 1, 1, 1" 
+                         AbsoluteLayout.LayoutFlags="All">
+                <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Orientation="Vertical" BackgroundColor="White" Margin="0,30,0,30">
+                    <Image x:Name="imgPopup" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></Image>
+                    <Button TextColor="White" BackgroundColor="Accent" Margin="20,0,20,20" Text="Fermer" Clicked="ButtonPopup_Clicked"></Button>
+                </StackLayout>
+            </ContentView>
+
+            <viewsModel:ImageButton Source="email.png"
+                                  Command="{Binding AddCommand}"
+                                  AbsoluteLayout.LayoutFlags="PositionProportional"
+                                  AbsoluteLayout.LayoutBounds="1.0,1.0,-1,-1"
+                                  Margin="10" />
+            <ActivityIndicator IsRunning="{Binding Busy}"
+                               IsVisible="{Binding Busy}"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand">
+                <ActivityIndicator.WidthRequest>
+                    <OnPlatform x:TypeArguments="x:Double" iOS="100" Android="100" WinPhone="400" />
+                </ActivityIndicator.WidthRequest>
+                <ActivityIndicator.Color>
+                    <OnPlatform x:TypeArguments="Color"
+                            iOS="#2499CE" WinPhone="#2499CE" />
+                </ActivityIndicator.Color>
+            </ActivityIndicator>
+
+
+        </AbsoluteLayout>
+    </StackLayout>
+</ContentPage>

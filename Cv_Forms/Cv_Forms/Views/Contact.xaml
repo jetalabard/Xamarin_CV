@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:viewModels="clr-namespace:Cv_Forms.ViewModels"
+             Title="{Binding Title}"
+             x:Class="Cv_Forms.Views.Contact">
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout BackgroundColor="#2c3e50" Padding="20,0,0,10">
+                <Label Text="{Binding Subtitle}" TextColor="White" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+            <maps:Map x:Name="map" 
+                      MapType="Street" HasZoomEnabled="True" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="10">
+                <Label x:Name="mail" Text="{Binding Email}" FontSize="Large"/>
+                <viewModels:ImageButton Source="email.png" Command="{Binding Clicked_Mail}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="10">
+                <viewModels:ImageButton Source="facebook.png" Command="{Binding Clicked_Facebook}" />
+                <viewModels:ImageButton Source="linkedin.png" Command="{Binding Clicked_Linkedin}" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

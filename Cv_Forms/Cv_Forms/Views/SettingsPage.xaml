@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
+             xmlns:custom="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:viewsModel="clr-namespace:Cv_Forms.ViewModels"
+             x:Class="Cv_Forms.Views.SettingsPage">
+    <ContentPage.BindingContext>
+        <viewsModel:SettingViewModel />
+    </ContentPage.BindingContext>
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutFlags="All"
+                    AbsoluteLayout.LayoutBounds="0,1,1,1"
+                    VerticalOptions="FillAndExpand">
+            <StackLayout BackgroundColor="#2c3e50" Padding="20,0,0,10">
+                <Label Text="{Binding Subtitle}" TextColor="White" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+            <StackLayout Orientation="Vertical"  HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Padding="20,0,20,0">
+                <Label FontSize="Medium" Text="Taux de refraîchissement des données :"></Label>
+                <Slider MaximumTrackColor="Gray"  MinimumTrackColor="Accent" Maximum="90" Minimum="1"  x:Name="slider" ThumbColor="Accent"></Slider>
+                <Label FontSize="Medium" x:Name="labelSlider" HorizontalOptions="CenterAndExpand"></Label>
+            </StackLayout>
+        </StackLayout>
+        <viewsModel:ImageButton Source="email.png"
+                                Command="{Binding AddCommand}"
+                                AbsoluteLayout.LayoutFlags="PositionProportional"
+                                AbsoluteLayout.LayoutBounds="1.0,1.0,-1,-1"
+                                Margin="10" />
+        <ActivityIndicator IsRunning="{Binding Busy}"
+                               IsVisible="{Binding Busy}"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand">
+            <ActivityIndicator.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double" iOS="100" Android="100" WinPhone="400" />
+            </ActivityIndicator.WidthRequest>
+            <ActivityIndicator.Color>
+                <OnPlatform x:TypeArguments="Color"
+                                iOS="#2499CE" WinPhone="#2499CE" />
+            </ActivityIndicator.Color>
+        </ActivityIndicator>
+    </AbsoluteLayout>
+</ContentPage>

@@ -8,12 +8,22 @@ namespace Cv_Forms.Models
     {
         Home,
         Project,
-        Contact
+        Contact,
+        PersonalProject,
+        Training,
+        Knowledge,
+        Job,
+        Hobie,
+        Settings,
+        Redirection
     }
+
     public class HomeMenuItem
     {
         public MenuItemType Id { get; set; }
 
         public string Title { get; set; }
+
+        public string Icon { get; set; }
     }
 }

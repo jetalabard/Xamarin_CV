@@ -77,13 +77,13 @@ namespace Cv_Core.DataModel
                                 break;
                             case Constants.LAT:
                                 double lat = 0;
-                                Double.TryParse(column.InnerText.Replace('.', ','), out lat);
+                                double.TryParse(column.InnerText.Replace('.', ','), out lat);
                                 Lat = lat;
                                 break;
                             case Constants.LONG:
                                 double longi = 0;
-                                Double.TryParse(column.InnerText.Replace('.', ','), out longi);
-                                Lat = longi;
+                                double.TryParse(column.InnerText.Replace('.', ','), out longi);
+                                Long = longi;
                                 break;
                             case Constants.LINKAPP:
                                 break;

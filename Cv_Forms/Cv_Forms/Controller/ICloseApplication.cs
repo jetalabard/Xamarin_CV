@@ -4,6 +4,6 @@ namespace Cv_Forms.Controller
 {
     public interface ICloseApplication
     {
-        void CloseApplicationProcess();
+        void FinishApplication();
     }
 }

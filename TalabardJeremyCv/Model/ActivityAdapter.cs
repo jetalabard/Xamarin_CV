@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Cv_Core;
@@ -63,7 +64,7 @@ namespace TalabardJeremyCv.Model
 
             var holder = (ViewItemHolder)view.Tag;
 
-            holder.Image.SetImageBitmap(ImageManager.GetBitmapFromPath(_Activities[position].Image));
+            holder.Image.SetImageBitmap(ImageManager<Bitmap>.GetInstance().GetImageFromPath(_Activities[position].Image));
             holder.Title.Text = _Activities[position].Title;
             holder.SubTitle.Text = _Activities[position].SubTitle;
             holder.Date.Text = _Activities[position].Date;

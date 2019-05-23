@@ -1,92 +1,93 @@
 ﻿using Cv_Core.DataModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Cv_Core.DataManagement
 {
-    internal class DataXMLFile : IDataAccess
+    public class DataXMLFile : IDataAccess
     {
         private XmlReader _Reader;
 
         public DataXMLFile(string fileName)
         {
-            _Reader = new XmlReader(fileName);
+            try
+            {
+                _Reader = new XmlReader(fileName);
+            }
+            catch(ArgumentException)
+            {
+                _Reader = null;
+            }
+           
         }
-
 
         public Cv Cv()
         {
-            return _Reader.Documents.FirstOrDefault();
+            return _Reader?.Documents?.FirstOrDefault();
         }
 
         public Description Description()
         {
-            return _Reader.Descriptions.FirstOrDefault();
+            return _Reader?.Descriptions?.FirstOrDefault();
         }
 
-        public IList<Header> Headers()
+        public ICollection<Header> Headers()
         {
-            return _Reader.Heads.ToList();
+            return _Reader?.Heads;
         }
 
-        public IList<Hobie> Hobies()
+        public ICollection<Hobie> Hobies()
         {
-            IList<Hobie> Hobies = _Reader.Hobies.ToList();
-            foreach(Hobie h in Hobies)
+            return AddLinksToActivities(_Reader?.Hobies);
+        }
+
+        public ICollection<Job> Jobs()
+        {
+            return AddLinksToActivities(_Reader?.Jobs);
+        }
+
+        public ICollection<Knowledge> Knowledges()
+        {
+            return _Reader?.Knowledges;
+        }
+
+        public ICollection<Link> Links()
+        {
+            return _Reader?.Links;
+        }
+
+        public ICollection<PersonalProject> PersonalProjects()
+        {
+            return AddLinksToActivities(_Reader?.PersonalProjects);
+        }
+
+        public ICollection<Project> Projects()
+        {
+            return AddLinksToActivities(_Reader?.Projects);
+        }
+
+        public ICollection<Training> Trainings()
+        {
+            return AddLinksToActivities(_Reader?.Trainings);
+        }
+
+        private ICollection<T> AddLinksToActivities<T>(ICollection<T> activities) where T :Activity
+        {
+            if(activities != null)
             {
-                h.Links = Links().Where(link => link.IdLinks == h.IdLinks).ToList();
+                foreach (T act in activities)
+                {
+                    act.Links = AddDependantLinks(act);
+                }
             }
-            return Hobies;
+           
+            return activities;
         }
 
-        public IList<Job> Jobs()
+        private List<Link> AddDependantLinks<T>(T act) where T : Activity
         {
-            IList<Job> Jobs = _Reader.Jobs.ToList();
-            foreach (Job h in Jobs)
-            {
-                h.Links = Links().Where(link => link.IdLinks == h.IdLinks).ToList();
-            }
-            return Jobs;
-        }
-
-        public IList<Knowledge> Knowledges()
-        {
-            return _Reader.Knowledges.ToList();
-        }
-
-        public IList<Link> Links()
-        {
-            return _Reader.Links.ToList();
-        }
-
-        public IList<PersonalProject> PersonalProjects()
-        {
-            IList<PersonalProject> PersonalProjects = _Reader.PersonalProjects.ToList();
-            foreach (PersonalProject h in PersonalProjects)
-            {
-                h.Links = Links().Where(link => link.IdLinks == h.IdLinks).ToList();
-            }
-            return PersonalProjects;
-        }
-
-        public IList<Project> Projects()
-        {
-            IList<Project> Projects = _Reader.Projects.ToList();
-            foreach (Project h in Projects)
-            {
-                h.Links = Links().Where(link => link.IdLinks == h.IdLinks).ToList();
-            }
-            return Projects;
-        }
-
-        public IList<Training> Trainings()
-        {
-            IList<Training> Trainings = _Reader.Trainings.ToList();
-            foreach (Training h in Trainings)
-            {
-                h.Links = Links().Where(link => link.IdLinks == h.IdLinks).ToList();
-            }
-            return Trainings;
+            return Links().Where(link => link.IdLinks == act.IdLinks).ToList();
         }
     }
 }

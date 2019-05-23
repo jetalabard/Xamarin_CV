@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Cv_Forms.Controller;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using Xamarin.Forms;
 
 namespace Cv_Core.Downloader
 {
@@ -9,11 +11,12 @@ namespace Cv_Core.Downloader
     {
         public event EventHandler<DownloadEventArgs> OnFileDownloaded;
 
-        private DirectoryManager _DirectoryManager;
+        private IDirectoryManager _ManagerDirectory;
 
-        public Downloader(DirectoryManager dirManager)
+
+        public Downloader(IDirectoryManager managerDirectory = null)
         {
-            _DirectoryManager = dirManager;
+            _ManagerDirectory = managerDirectory;
         }
 
         public void DownloadFile(string url, string folder,string filename)
@@ -22,8 +25,8 @@ namespace Cv_Core.Downloader
             {
                 WebClient webClient = new WebClient();
                 webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-               
-                folder = Path.Combine(_DirectoryManager.GetExternalDirectory(), folder);
+                
+                folder = Path.Combine(new DirectoryDefaultManager().GetExternalDirectory(_ManagerDirectory), folder);
                 if (!File.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);

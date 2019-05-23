@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:local="clr-namespace:Cv_Forms.Views"
+            xmlns:viewsModel="clr-namespace:Cv_Forms.ViewModels"
+            Title="{Binding Title}"
+            x:Class="Cv_Forms.Views.KnowledgePage">
+
+    <TabbedPage.BindingContext>
+        <viewsModel:KnowledgesViewModel/>
+    </TabbedPage.BindingContext>
+    
+    <local:KnowledgeLanguage x:Name="Language"/>
+    <local:KnowledgeTool x:Name="Tool"/>
+</TabbedPage>

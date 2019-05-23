@@ -1,30 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 
 namespace Cv_Core.DataModel
 {
     public abstract class Activity : AbstractEntity<Activity>
     {
-        public string Title;
+        public string Title { get; set; }
         
-        public string SubTitle;
-        
-        public string Image;
-        
-        public string Summary;
-        
-        public string Date;
-        
-        public int? IdLinks;
+        public string SubTitle { get; set; }
+
+        public string Image { get; set; }
+
+        public string Summary { get; set; }
+
+        public string Date { get; set; }
+
+        public int? IdLinks { get; set; }
 
 
-        public List<Link> Links;
-        
+        public List<Link> Links { get; set; }
+
 
         public Activity(XmlNode node) : base(null)
         {
             ReadXml(node);
+        }
+
+        public string SubTitleWithDate
+        {
+
+            get
+            {
+                return string.Format("{0} - {1}", SubTitle, Date);
+            }
         }
 
 
@@ -42,7 +50,7 @@ namespace Cv_Core.DataModel
                         switch (attributeName.Value)
                         {
                             case Constants.ID:
-                                Id = Convert.ToInt16(column.InnerText);
+                                Id = System.Convert.ToInt16(column.InnerText);
                                 break;
                             case Constants.TITLE:
                                 Title = column.InnerText;
@@ -60,7 +68,7 @@ namespace Cv_Core.DataModel
                                 Date = column.InnerText;
                                 break;
                             case Constants.IDLINKS:
-                                IdLinks = Convert.ToInt16(column.InnerText);
+                                IdLinks = System.Convert.ToInt16(column.InnerText);
                                 break;
                             default:
                                 throw new XmlException("Undexpected attribute in " + column.Name);
@@ -73,6 +81,11 @@ namespace Cv_Core.DataModel
             }
 
 
+        }
+
+        public static ICollection<Activity> Convert<T>(ICollection<T> activities) where T : Activity
+        {
+            return activities == null ? null: new List<Activity>(activities);
         }
     }
 }

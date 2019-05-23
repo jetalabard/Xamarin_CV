@@ -9,6 +9,7 @@ using Android.Support.V7.App;
 using Cv_Core.DataModel;
 using Cv_Core.DataManagement;
 using Cv_Core;
+using Android.Graphics;
 
 namespace TalabardJeremyCv.XView.XFragment
 {
@@ -51,7 +52,7 @@ namespace TalabardJeremyCv.XView.XFragment
                     TitleLabel.Visibility = ViewStates.Invisible;
                 }
 
-                image.SetImageBitmap(ImageManager.GetBitmapFromPath(_description.Image));
+                image.SetImageBitmap(ImageManager<Bitmap>.GetInstance().GetImageFromPath(_description.Image));
             }
             InitCardView(view, Resource.Id.schoolLink, Resource.Id.TitleSchool, Resource.Id.DescriptionSchool, "Formations", OnClickSchoolCardView);
             InitCardView(view, Resource.Id.projectLink, Resource.Id.TitleProject, Resource.Id.DescriptionProject, "Projets et Stages", OnClickProjectCardView);

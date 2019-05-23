@@ -3,30 +3,38 @@ using Android.Graphics;
 
 namespace Cv_Core
 {
-    public class ImageManager
+    public class ImageManager<T>
     {
-        private static ImageManager _Instance = null;
+        private static ImageManager<T> _Instance = null;
         private static string _ImagePath;
 
-        public ImageManager(string imagePath)
+        private ICreateImage<T> _Creator;
+
+        public ImageManager(string imagePath, ICreateImage<T> creator  = null)
         {
             _ImagePath = imagePath;
+            _Creator = creator;
         }
 
-        public static ImageManager GetInstance(string imagePath="")
+        public static ImageManager<T> GetInstance(string imagePath="", ICreateImage<T> creator = null)
         {
             if(_Instance == null)
             {
-                _Instance = new ImageManager(imagePath);
+                _Instance = new ImageManager<T>(imagePath, creator);
             }
             return _Instance;
         }
 
-        public static Bitmap GetBitmapFromPath(string ImageName)
+        public T GetImageFromPath(string ImageName)
         {
-            string imagePath = System.IO.Path.Combine(_ImagePath, ImageName);
-            byte[] bytesImages = File.ReadAllBytes(imagePath);
-            return BitmapFactory.DecodeByteArray(bytesImages, 0, bytesImages.Length);
+            T image = default;
+            if (!string.IsNullOrEmpty(ImageName))
+            {
+                string imagePath = System.IO.Path.Combine(_ImagePath, ImageName);
+                image= _Creator.CreateImage(imagePath);
+            }
+            return image;
+            
         }
 
 

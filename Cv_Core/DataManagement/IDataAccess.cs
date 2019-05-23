@@ -5,15 +5,15 @@ namespace Cv_Core.DataManagement
 {
     public interface IDataAccess
     {
-        IList<Hobie> Hobies();
-        IList<Job> Jobs();
-        IList<Project> Projects();
-        IList<PersonalProject> PersonalProjects();
-        IList<Training> Trainings();
+        ICollection<Hobie> Hobies();
+        ICollection<Job> Jobs();
+        ICollection<Project> Projects();
+        ICollection<PersonalProject> PersonalProjects();
+        ICollection<Training> Trainings();
 
-        IList<Link> Links();
-        IList<Header> Headers();
-        IList<Knowledge> Knowledges();
+        ICollection<Link> Links();
+        ICollection<Header> Headers();
+        ICollection<Knowledge> Knowledges();
 
         Description Description();
         Cv Cv();

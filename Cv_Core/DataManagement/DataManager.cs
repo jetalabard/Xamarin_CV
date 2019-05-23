@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using Cv_Core.DataModel;
-using Cv_Core.ConfigurationManagement;
 
 namespace Cv_Core.DataManagement
 {
@@ -34,42 +33,42 @@ namespace Cv_Core.DataManagement
         }
 
       
-        public IList<Hobie> Hobies()
+        public ICollection<Hobie> Hobies()
         {
             return _DataAccess.Hobies();
         }
 
-        public IList<Job> Jobs()
+        public ICollection<Job> Jobs()
         {
             return _DataAccess.Jobs();
         }
 
-        public IList<Project> Projects()
+        public ICollection<Project> Projects()
         {
             return _DataAccess.Projects();
         }
 
-        public IList<PersonalProject> PersonalProjects()
+        public ICollection<PersonalProject> PersonalProjects()
         {
             return _DataAccess.PersonalProjects();
         }
 
-        public IList<Training> Trainings()
+        public ICollection<Training> Trainings()
         {
             return _DataAccess.Trainings();
         }
 
-        public IList<Link> Links()
+        public ICollection<Link> Links()
         {
             return _DataAccess.Links();
         }
 
-        public IList<Header> Headers()
+        public ICollection<Header> Headers()
         {
             return _DataAccess.Headers();
         }
 
-        public IList<Knowledge> Knowledges()
+        public ICollection<Knowledge> Knowledges()
         {
             return _DataAccess.Knowledges();
         }
@@ -85,30 +84,30 @@ namespace Cv_Core.DataManagement
         }
 
 
-         public IList<T> GetActivities<T>() where T :Activity
+         public ICollection<T> GetActivities<T>() where T :Activity
          {
-            IList<T> list = null;
+            ICollection<T> list = null;
             if(typeof(T) == typeof(Hobie))
             {
-                list = (List<T>)Hobies();
+                list = (ICollection<T>)Hobies();
             }
             else if (typeof(T) == typeof(Job))
             {
-                list = (List<T>)Jobs();
+                list = (ICollection<T>)Jobs();
             }
             else if(typeof(T) == typeof(Project))
             {
-                list = (List<T>)Projects();
+                list = (ICollection<T>)Projects();
             }
             else if(typeof(T) == typeof(PersonalProject))
             {
-                list = (List<T>)PersonalProjects();
+                list = (ICollection<T>)PersonalProjects();
             }
             else if(typeof(T) == typeof(Training))
             {
-                list = (List<T>)Trainings();
+                list = (ICollection<T>)Trainings();
             }
-            return list.OrderByDescending(l => l.Id).ToList();
+            return list?.OrderByDescending(l => l.Id).ToList();
         }
 
 

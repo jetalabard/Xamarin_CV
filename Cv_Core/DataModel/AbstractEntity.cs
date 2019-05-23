@@ -19,7 +19,7 @@ namespace Cv_Core.DataModel
         public bool Equals(T other)
         {
             AbstractEntity<T> obj = other as AbstractEntity<T>;
-            if (this.Id.Equals(obj.Id))
+            if (Id.Equals(obj.Id))
             {
                 return true;
             }

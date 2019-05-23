@@ -1,22 +1,49 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Cv_Forms.Views.MenuPage"
-             Title="Menu">
-             
+﻿<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Cv_Forms.Views.MenuPage"
+    xmlns:custom="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:viewsModel="clr-namespace:Cv_Forms.ViewModels"
+    Title="Menu">
     <StackLayout VerticalOptions="FillAndExpand">
+
+        <StackLayout Padding="10,0,10,0"
+                     BackgroundColor="#2c3e50"
+                     VerticalOptions="CenterAndExpand">
+            <Label x:Name="ApplicationName"
+                   FontSize="Medium"
+                   TextColor= "#ffffff"
+                   Text="{Binding Name}"
+                   HorizontalOptions="CenterAndExpand"/>
+
+            <Label x:Name="Email"
+                   FontSize="Medium"
+                   Text="{Binding Email}"
+                   TextColor= "#ffffff"
+                   HorizontalOptions="CenterAndExpand"/>
+
+            <custom:CircleImage
+                          WidthRequest="100"
+                          HeightRequest="100"
+                          Source="{Binding Image}"
+                          Aspect="AspectFill"
+                          VerticalOptions="Start"
+                          HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+
+
         <ListView x:Name="ListViewMenu"
-                    HasUnevenRows="True">
+                HasUnevenRows="False">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Padding="10">
-                            <Label Text="{Binding Title}" FontSize="20"/>
-                        </Grid>
+                        <StackLayout Padding="10" Orientation="Horizontal"> 
+                            <Image Source="{Binding Icon}" VerticalOptions="Center" />
+                            <Label Text="{Binding Title}"  VerticalOptions="Center" FontSize="20"/>
+                        </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </StackLayout>
-
 </ContentPage>

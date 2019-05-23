@@ -61,20 +61,23 @@ namespace Cv_Core
 
         //constants for menu
         public const string PAGE_HOBIE = "Loisirs";
-        public const string PAGE_KNOWLEDGE = "Compétences Informatique";
+        public const string PAGE_KNOWLEDGE = "Mes compétences informatiques";
         public const string HOME_PAGE = "Accueil";
         public const string PAGE_CV = "Cv";
         public const string PAGE_TRAINING = "Formations";
         public const string PAGE_JOB = "Emplois";
-        public const string PAGE_PERSONALPROJECT = "Projets Personels";
-        public const string PAGE_PROJECT = "Projets / Stages";
+        public const string PAGE_PERSONALPROJECT = "Projets Personnels";
+        public const string PAGE_PROJECT = "Projets et Stages";
         public const string PAGE_SETTING = "Paramètre";
+        public const string PAGE_CONTACTS = "Contacts";
+        public const string APP_NAME = "Talabard Jérémy";
 
 
         public const string MESSAGE_CALL_PERMISSION_DENIED = "Vous n'avez pas accordé la permission à l'application de passer un appel. (Aller dans les paramètres pour le modifier)";
 
         //sharred preference constants
         public const string REFRESH_MODE_PREFERENCES = "refresh_mode";
+        public const string REFRESH_MODE_PREFERENCES_DAYS = "refresh_mode_days";
 
         //Parameters
         public const string ADRESS_PARAMETER = "adress";
@@ -85,5 +88,7 @@ namespace Cv_Core
         public const string LINKAPP = "linkApp";
 
         public static string DATE_DOWNLAOD = "date_download_database";
+
+        public const string SHARED_SCREENLAUNCH = "SCREENLAUNCH";
     }
 }
